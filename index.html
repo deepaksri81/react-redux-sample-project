@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Developer - Portfolio</title>
+
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href="css/creative.css" rel="stylesheet">
+    <link href="css/portfolio-item.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
+
+    <script src="vendor/babel/browser.min.js"></script>
+    <script src="vendor/react/react.js"></script>
+    <script src="vendor/react/react-dom.js"></script>
+    <script src="vendor/react/react-router.3.js"></script>
+    <script src="vendor/redux/redux.js"></script>
+    <script src="vendor/redux/react-redux.js"></script>
+
+    <script src="js/creative.js"></script>
+
+    <script src="data/dataClasses.js"></script>
+    <script src="data/dataSource.js"></script>
+    <script src="reducers/reducers.js"></script>
+    <script src="containers/mapStateToProps.js"></script>
+
+    <script type="text/babel" >
+        var { Router, Route, IndexRoute, IndexLink, hashHistory, Link } = ReactRouter; 
+     
+        class NavBar extends React.Component {
+            componentDidMount() {
+                // Highlight the top nav as scrolling occurs
+                $('body').scrollspy({
+                    target: '.navbar-fixed-top',
+                    offset: 51
+                });
+                // Offset for Main Navigation
+                $('#mainNav').affix({
+                    offset: {
+                        top: 100
+                    }
+                });
+                // Closes the Responsive Menu on Menu Item Click
+                $('.navbar-collapse ul li a').click(function() {
+                    $('.navbar-toggle:visible').click();
+                });
+            }
+            render() {
+                return (
+                <nav id="mainNav" className="navbar navbar-default navbar-fixed-top">
+                    <div className="container-fluid">
+                        <div className="navbar-header">
+                            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                                <span className="sr-only">Toggle navigation</span> Menu <i className="fa fa-bars"></i>
+                            </button>
+                            <IndexLink className="navbar-brand page-scroll" to="/" data-target="#page-top" activeClassName="active">Home</IndexLink>
+                        </div>
+
+                        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul className="nav navbar-nav navbar-right">
+                                <li>
+                                    <Link to="/about" data-target="#about" className="page-scroll" activeClassName="active">About</Link>
+                                </li>
+                                <li>
+                                    <Link to="/strengths" data-target="#strengths"  className="page-scroll" activeClassName="active">strengths</Link>
+                                </li>
+                                <li>
+                                    <Link to="/portfolio" data-target="#portfolio" className="page-scroll" activeClassName="active">Portfolio</Link>
+                                </li>
+                                <li>
+                                    <Link to="/contact" data-target="#contact" className="page-scroll" activeClassName="active">Contact</Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            );
+            }
+        }
+
+        class ContactView extends React.Component {
+            componentDidMount() {
+                setupReveal('.sr-contact');
+            }
+            render() {
+            return (
+                <section id="contact">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-lg-8 col-lg-offset-2 text-center">
+                                <h2 className="section-heading">Let's Get In Touch!</h2>
+                                <hr className="primary"/>
+                                <p>Do you need a .NET Web developer?</p>
+                                <p>Feel free to contact me if you are interested!</p>
+                            </div>
+                            <div className="col-lg-4 col-lg-offset-2 text-center">
+                                <i className="fa fa-skype fa-3x sr-contact"></i>
+                                <p><a href={`skype:${this.props.info.skype}`}>{this.props.info.skype}</a></p>
+                            </div>
+                            <div className="col-lg-4 text-center">
+                                <i className="fa fa-envelope-o fa-3x sr-contact"></i>
+                                <p><a href={`mailto:${this.props.info.email}`}>{this.props.info.email}</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+            }
+        }
+
+        class StrengthListView extends React.Component {
+            componentDidMount() {
+                setupReveal('.sr-icons');
+            }
+            render() {
+            return (
+                <section id="strengths">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-lg-12 text-center">
+                                <h2 className="section-heading">Things I love</h2>
+                                <hr className="primary"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="container">
+                        <div className="row">
+                            {this.props.strengths.map((item, idx) => (
+                                <StrengthView key={idx} data={item} />
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+            }
+        }
+
+        const HeaderView = ({ info }) => (
+            <div id="header">
+                <div className="darkenLayer">
+                </div>
+                <div className="header-content">
+                    <h1>Hello, <span className="delight">I'm</span> {info.name}</h1>
+                    <h4>{info.title}</h4>
+                </div>
+            </div>
+        )
+
+        const AboutView = ({ description }) => (
+            <section id="about" className="bg-primary">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-9 col-lg-offset-2 text-center">
+                            <h2 className="section-heading">{description.title}</h2>
+                            <hr className="light"/>
+                            <p className="text-faded">{description.content}</p>
+                            <div className="text-faded"><TextBlocksOverview blocks={description.sub_blocks} /></div>
+                            <div className="section-cmd"><Link to="/strengths" className="page-scroll btn btn-default btn-xl sr-button">More...</Link></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        )
+
+        const StrengthView = ({ data }) => (
+            <div className="col-lg-3 col-md-6 text-center">
+                <div className="service-box">
+                    <i className={`fa fa-4x ${data.icon} text-primary sr-icons`}></i>
+                    <h3>{data.title}</h3>
+                    <p className="text-muted">{data.content}</p>
+                </div>
+            </div>
+        )
+
+        const App = ({ children }) => (
+            <div id="page-top">
+                <NavBar />
+                {children}
+            </div>
+        )  
+
+        const Home = () => (
+            <div>
+                <Header />
+                <About />
+                <Strengths />
+                <Projects />
+                <Contact />
+            </div>
+        )
+
+        const ProjectListView = ({ projects }) => (
+            <section id="portfolio" className="no-padding-with-header bg-primary">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-8 col-lg-offset-2 text-center">
+                            <h2 className="section-heading">Stuff I Did</h2>
+                            <hr className="light"/>
+                            <p className="text-faded">&nbsp;</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="container-fluid">
+                    <div className="row no-gutter">
+                        {projects.map(item => (
+                            <ProjectView key={item.id} project={item} />
+                        ))}
+                    </div>
+                </div>
+            </section>
+        )
+
+        const ProjectView = ({ project }) => (
+            <div className="col-lg-4 col-sm-6">
+                <Link to={`/project/${project.id}`} data-target="#project_this" className="portfolio-box">
+                    <img src={project.image} className="img-responsive" alt=""/>
+                    <div className="portfolio-box-caption">
+                        <div className="portfolio-box-caption-content">
+                            <div className="project-category text-faded">
+                                {project.category}
+                            </div>
+                            <div className="project-name">
+                                {project.name}
+                            </div>
+                        </div>
+                    </div>
+                </Link>
+            </div>
+        )
+
+        const ProjectDetailView = ({ project, related_projects }) => (
+            <div id="project-detail" className="container">
+                <div className="row">
+                    <div className="col-lg-12">
+                        <h1 className="page-header">{project.title}
+                            { project.sub_title ? (<small>{project.sub_title}</small>) : "" }
+                        </h1>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-md-7">
+                        <img className="img-responsive" src={project.big_image} alt=""/>
+                    </div>
+                    <div className="col-md-5">
+                        <SimpleTextBlock block={project.description} title="Project Description"/>
+                        <SimpleTextBlock block={project.technologies} title="Technical Sheet"/>
+                        <HyperLinkList links={project.resources} title="Resources" sub_title=""/>
+                    </div>
+                </div>
+                <RelatedProjectList projects={related_projects}/>
+            </div>
+        )  
+
+        const RelatedProjectList = ({projects}) => (
+            <div className="row">
+                <div className="col-lg-12">
+                    <h3 className="page-header">Related Projects</h3>
+                </div>
+
+                {projects.map(item => (
+                    <div key={item.id} className="col-sm-3 col-xs-6">
+                        <Link to={`/project/${item.id}`}>
+                            <img className="img-responsive portfolio-item" src={item.image} alt=""/>
+                        </Link>
+                    </div>
+                ))}
+            </div>
+        )
+
+        function SimpleTextBlock({block, title}) {
+            if (block)
+                return (
+                    <div className="text-block">
+                        <h3>{ title ? title : block.title }</h3>
+                        { title && block.title ? (<h5 className="sub-title">{block.title}</h5>) : "" }
+                        <hr/>
+                        <p>{block.content}</p>
+                        <TextBlocksOverview blocks={block.sub_blocks} />
+                    </div>
+                );
+            else return null;
+        }
+
+        function TextBlocksOverview({blocks}) {
+            if (blocks && blocks.length > 0) {
+                let useCustomBullet = blocks.some(x => x.icon);
+                return (
+                    <ul>
+                        {blocks.map((item, idx) => (
+                            <li key={idx} className={useCustomBullet ? "custom-list-style" : ""}>
+                                {useCustomBullet ? <span className={`fa ${item.icon}`} /> : null}
+                                {item.title}
+                            </li>
+                        ))}
+                    </ul>
+                );
+            } else return null;
+        }
+
+        function HyperLinkList({links, title, sub_title}) {
+            console.log(links);
+            if (links && links.length > 0) {
+                return (
+                    <div className="text-block">
+                        <h3>{ title }</h3>
+                        { sub_title }
+                        <hr/>
+                        <ol>
+                            {links.map(item => (
+                                <li><a target={item.target} href={item.link}>{item.title}</a></li>
+                            ))}
+                        </ol>
+                    </div>
+                );
+            } else return null;
+        }
+
+        let appDataStore = Redux.createStore(getRootReducer());
+
+        let Header = ReactRedux.connect(mapStateToHeaderProps)(HeaderView);
+        let About = ReactRedux.connect(mapStateToAboutProps)(AboutView);
+        let Strengths = ReactRedux.connect(mapStateToStrengthsProps)(StrengthListView);
+        let Projects = ReactRedux.connect(mapStateToProjectsProps)(ProjectListView);
+        let Contact = ReactRedux.connect(mapStateToContactProps)(ContactView);
+        let ProjectDetail = ReactRedux.connect(mapStateToProjectDetailProps)(ProjectDetailView);
+
+        ReactDOM.render(
+        <ReactRedux.Provider store={appDataStore}>
+            <Router history={hashHistory} onUpdate={hashLinkScroll}>
+                <Route path="/" component={App}>
+                    <IndexRoute component={Home}/>
+                    <Route path="about" component={Home} />
+                    <Route path="portfolio" component={Home} />
+                    <Route path="strengths" component={Home} />
+                    <Route path="contact" component={Home} />
+                    <Route path="project/:id" component={ProjectDetail} onChange={onRouteChanged}/>
+                </Route>
+            </Router>
+        </ReactRedux.Provider>,
+        document.body );
+    </script>
+</body>
+
+</html>
